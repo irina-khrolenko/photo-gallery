@@ -1,5 +1,6 @@
-<!-- <<photo-gallery>> -->
+# photo-gallery
 
+```
 nvm use 20.14.0
 
 cd backend
@@ -12,4 +13,7 @@ cd ../frontend
 
 npm install
 
-npm run dev
+npm run dev 
+```
+
+
