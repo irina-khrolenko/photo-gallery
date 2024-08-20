@@ -811,13 +811,13 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
           localized: true;
         };
       }>;
-    category: Attribute.String &
+    coverImage: Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
         };
       }>;
-    coverImage: Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
+    category: Attribute.String &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -1015,7 +1015,12 @@ export interface ApiTagTag extends Schema.CollectionType {
       'api::tag.tag',
       'oneToOne',
       'api::category.category'
-    >;
+    > &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::tag.tag', 'oneToOne', 'admin::user'> &
