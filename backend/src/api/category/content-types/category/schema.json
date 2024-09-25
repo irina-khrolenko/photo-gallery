@@ -20,9 +20,13 @@
       "pluginOptions": {
         "i18n": {
           "localized": true
+        },
+        "translate": {
+          "translate": "translate"
         }
       },
-      "type": "string"
+      "type": "string",
+      "unique": true
     },
     "coverImage": {
       "type": "media",
@@ -46,7 +50,8 @@
           "localized": false
         }
       },
-      "type": "string"
+      "type": "string",
+      "required": true
     }
   }
 }

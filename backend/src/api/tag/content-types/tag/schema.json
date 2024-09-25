@@ -20,28 +20,21 @@
       "pluginOptions": {
         "i18n": {
           "localized": true
+        },
+        "translate": {
+          "translate": ""
         }
       },
       "type": "string",
       "required": true
     },
-    "tag": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
-      "type": "string",
-      "unique": false,
-      "required": true
-    },
-    "category": {
+    "categories": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::category.category",
       "pluginOptions": {
-        "i18n": {
-          "localized": false
+        "translate": {
+          "translate": ""
         }
       }
     }

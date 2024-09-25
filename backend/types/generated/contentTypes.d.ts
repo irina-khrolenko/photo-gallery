@@ -590,6 +590,63 @@ export interface PluginContentReleasesReleaseAction
   };
 }
 
+export interface PluginTranslateBatchTranslateJob
+  extends Schema.CollectionType {
+  collectionName: 'translate_batch_translate_jobs';
+  info: {
+    singularName: 'batch-translate-job';
+    pluralName: 'batch-translate-jobs';
+    displayName: 'Translate Batch Translate Job';
+  };
+  options: {
+    draftAndPublish: false;
+    comment: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    contentType: Attribute.String;
+    sourceLocale: Attribute.String;
+    targetLocale: Attribute.String;
+    entityIds: Attribute.JSON;
+    status: Attribute.Enumeration<
+      [
+        'created',
+        'setup',
+        'running',
+        'paused',
+        'finished',
+        'cancelled',
+        'failed'
+      ]
+    > &
+      Attribute.DefaultTo<'created'>;
+    failureReason: Attribute.JSON;
+    progress: Attribute.Float & Attribute.DefaultTo<0>;
+    autoPublish: Attribute.Boolean & Attribute.DefaultTo<false>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::translate.batch-translate-job',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::translate.batch-translate-job',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginI18NLocale extends Schema.CollectionType {
   collectionName: 'i18n_locale';
   info: {
@@ -806,9 +863,13 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String &
+      Attribute.Unique &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
+        };
+        translate: {
+          translate: 'translate';
         };
       }>;
     coverImage: Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
@@ -818,6 +879,7 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
         };
       }>;
     category: Attribute.String &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -865,22 +927,31 @@ export interface ApiImageImage extends Schema.CollectionType {
   attributes: {
     name: Attribute.String &
       Attribute.Required &
+      Attribute.Unique &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
+        };
+        translate: {
+          translate: '';
         };
       }>;
     description: Attribute.String &
-      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
+        translate: {
+          translate: 'translate';
+        };
       }>;
-    tag: Attribute.Relation<'api::image.image', 'oneToOne', 'api::tag.tag'> &
+    tags: Attribute.Relation<'api::image.image', 'oneToMany', 'api::tag.tag'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
+        };
+        translate: {
+          translate: '';
         };
       }>;
     image: Attribute.Media<'images'> &
@@ -929,22 +1000,25 @@ export interface ApiMainMain extends Schema.SingleType {
     };
   };
   attributes: {
-    mainImage: Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
+    mainImage: Attribute.Media<'images'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
         };
       }>;
-    avatar: Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
+    avatar: Attribute.Media<'images'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
         };
       }>;
-    mainVideo: Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
+    mainVideo: Attribute.Media<'videos'> &
       Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
+        };
+        translate: {
+          translate: 'translate';
         };
       }>;
     mainText: Attribute.Blocks &
@@ -953,7 +1027,7 @@ export interface ApiMainMain extends Schema.SingleType {
           localized: true;
         };
       }>;
-    sliderImage: Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
+    sliderImage: Attribute.Media<'images'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -963,6 +1037,39 @@ export interface ApiMainMain extends Schema.SingleType {
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
+        };
+        translate: {
+          translate: 'translate';
+        };
+      }>;
+    phoneMockup: Attribute.Media<'images'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    instaLikes: Attribute.Media<'images'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    instaMockup: Attribute.Media<'images'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    instaMediaOne: Attribute.Media<'images'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    instaMediaTwo: Attribute.Media<'images'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
         };
       }>;
     createdAt: Attribute.DateTime;
@@ -1003,22 +1110,18 @@ export interface ApiTagTag extends Schema.CollectionType {
         i18n: {
           localized: true;
         };
-      }>;
-    tag: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
+        translate: {
+          translate: '';
         };
       }>;
-    category: Attribute.Relation<
+    categories: Attribute.Relation<
       'api::tag.tag',
-      'oneToOne',
+      'oneToMany',
       'api::category.category'
     > &
       Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
+        translate: {
+          translate: '';
         };
       }>;
     createdAt: Attribute.DateTime;
@@ -1050,6 +1153,7 @@ declare module '@strapi/types' {
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
+      'plugin::translate.batch-translate-job': PluginTranslateBatchTranslateJob;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;

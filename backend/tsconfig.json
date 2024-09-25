@@ -7,7 +7,9 @@
     "checkJs": true,
     "allowJs": true,
     "outDir": "dist",
-    "rootDir": "."
+    "rootDir": ".",
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["./", "src/**/*.json"],
   "exclude": [

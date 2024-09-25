@@ -20,27 +20,37 @@
       "pluginOptions": {
         "i18n": {
           "localized": true
+        },
+        "translate": {
+          "translate": ""
         }
       },
       "type": "string",
-      "required": true
+      "required": true,
+      "unique": true
     },
     "description": {
       "pluginOptions": {
         "i18n": {
           "localized": true
+        },
+        "translate": {
+          "translate": "translate"
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
-    "tag": {
+    "tags": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::tag.tag",
       "pluginOptions": {
         "i18n": {
           "localized": false
+        },
+        "translate": {
+          "translate": ""
         }
       }
     },
