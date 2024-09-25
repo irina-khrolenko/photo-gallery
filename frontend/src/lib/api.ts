@@ -1,5 +1,4 @@
 import qs from "qs";
-
 export async function fetcher(url: string, params = {}, options = {}) {
   try {
     const queryString = qs.stringify(params, { addQueryPrefix: true });

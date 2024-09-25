@@ -1,0 +1,15 @@
+{
+  "Header": {
+    "gallery": "Gallery",
+    "blog": "Blog"
+  },
+  "Collections": "Collections of photos",
+  "Messages": {
+    "portfolio": "Here you can get acquainted with the collections of my portfolio",
+    "instagram": "And don't forget to visit me on Instagram 😉",
+    "visitInstagram": "I have been running my blog on social networks for a long time. Come in, because there is always something new here 🙂",
+    "followInstagram": "Follow me on Instagram and let's keep in touch!",
+    "newPosts": "You can follow my new works on social networks 😉",
+    "hashTags": "Find a photo by the corresponding #hashtag"
+  }
+}

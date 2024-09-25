@@ -1,3 +1,4 @@
+import { InstagramGallery } from "@/components";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -10,8 +11,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const Blog = (): JSX.Element => {
-  return <h1>Blog</h1>;
-};
+export default async function Blog() {
+  return (
+    <div>
+      <h1>Blog</h1>
+      <div>
+        <InstagramGallery />
+      </div>
+    </div>
+  );
+}
 
-export default Blog;
+//  Blog;

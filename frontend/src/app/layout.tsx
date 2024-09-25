@@ -3,8 +3,10 @@ import { Roboto } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/theme";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import "./styles/globals.css";
-import { Header } from "@/components";
+import { Footer, Header } from "@/components";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -17,18 +19,24 @@ export const metadata: Metadata = {
   icons: "/favicon.ico",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages({ locale });
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={roboto.className}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <Header />
-            {children}
+            <NextIntlClientProvider messages={messages} locale={locale}>
+              <Header />
+              {children}
+              <Footer />
+            </NextIntlClientProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

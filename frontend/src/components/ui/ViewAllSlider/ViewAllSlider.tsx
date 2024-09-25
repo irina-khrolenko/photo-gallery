@@ -2,6 +2,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { ViewAllSliderProps } from "./ViewAllSlider.props";
+import Link from "next/link";
 export const ViewAllSlider = ({
   sliderImage,
   sliderText,
@@ -22,11 +23,13 @@ export const ViewAllSlider = ({
         >
           <Box className="w-full h-full flex flex-col justify-center items-center">
             <Button>
-              <Typography variant="h5" component="h2">
-                {sliderText}
-              </Typography>
+              <Link href="/gallery">
+                <Typography variant="h5" component="h2">
+                  {sliderText}
+                </Typography>
+              </Link>
             </Button>
-            <hr className=" w-1/3 border-2 color-[#fff] my-4" />
+            <hr className="w-1/3 border-2 text-gallery-white my-4" />
           </Box>
         </Box>
       </Box>

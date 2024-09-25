@@ -15,8 +15,8 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     text: {
-      primary: "#ffffff", // Set primary text color to white
-      secondary: "#ffffff", // Set secondary text color to white if needed
+      primary: "#ffffff",
+      secondary: "#ffffff",
     },
   },
   components: {
