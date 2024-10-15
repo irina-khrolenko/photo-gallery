@@ -11,6 +11,7 @@ interface MainData {
   phoneMockup?: string;
   instaLikes: string;
   instaMockup: string;
+  parallaxImages: string[];
 }
 
 export interface MainDataState extends MainData {
@@ -43,6 +44,14 @@ const getMainInfoData = async (
     const instaMockup = data.instaMockup?.data
       ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.instaMockup.data.attributes.url}`
       : "";
+    const parallaxImages = data.parallaxImages?.data?.length
+      ? data.parallaxImages.data
+          ?.map((image: Media) => image.attributes?.url)
+          ?.sort()
+          ?.map(
+            (image: string) => `${process.env.NEXT_PUBLIC_STRAPI_URL}${image}`
+          )
+      : [];
     const mainData = {
       mainImage,
       mainText: data.mainText,
@@ -52,6 +61,7 @@ const getMainInfoData = async (
       instaLikes,
       instaMockup,
       sliderImage,
+      parallaxImages,
       sliderText: data.sliderText,
     };
     set(mainData);
@@ -61,7 +71,7 @@ const getMainInfoData = async (
 };
 
 const clearMainData = (set: (partial: Partial<MainDataState>) => void) => {
-  set({ mainImage: "", mainText: [], mainAvatar: "" });
+  set({ mainImage: "", mainText: [], mainAvatar: "", parallaxImages: [] });
 };
 
 const useMainDataStore = create<MainDataState>((set) => ({
@@ -75,6 +85,7 @@ const useMainDataStore = create<MainDataState>((set) => ({
   sliderText: "",
   instaMockup: "",
   instaLikes: "",
+  parallaxImages: [],
   setMainData: async (locale: string) => await getMainInfoData(set, locale),
   clearMainData: () => clearMainData(set),
 }));

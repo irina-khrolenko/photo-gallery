@@ -8,23 +8,26 @@ import { useState } from "react";
 
 export const GalleryImages = ({ images }: GalleryImagesProps) => {
   const [isImageOpen, setIsImageOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState<any>({});
 
   const handleOpenImage = (
     image: Image_Plain & { tags: string[]; image: string }
   ) => {
-    console.log("image", image);
     setIsImageOpen(true);
+    setCurrentImage(image);
   };
   const handleCloseImage = () => {
     setIsImageOpen(false);
+    setCurrentImage({});
   };
   return (
     <>
       <DetailedImage
         isImageOpen={isImageOpen}
         handleCloseModal={handleCloseImage}
+        image={currentImage}
       />
-      <ImageList variant="masonry" cols={5} gap={10}>
+      <ImageList variant="masonry" cols={4} gap={20}>
         {images?.map((item) => (
           <ImageListItem
             key={item.id}
@@ -49,7 +52,7 @@ export const GalleryImages = ({ images }: GalleryImagesProps) => {
               subtitle={
                 <div className="flex flex-wrap">
                   {item.tags?.map((v: string, index: number) => (
-                    <span className="mr-1">
+                    <span className="mr-1" key={v}>
                       #{v}
                       {index !== item.tags?.length - 1 && ","}
                     </span>

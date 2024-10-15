@@ -40,10 +40,11 @@ export const Collections = () => {
         <Box
           sx={{
             position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
+            width: "80%",
             height: "80%",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
             backgroundColor: "#394023",
             borderRadius: "20px",
             zIndex: -1,

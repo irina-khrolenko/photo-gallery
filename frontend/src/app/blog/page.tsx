@@ -13,13 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Blog() {
   return (
-    <div>
-      <h1>Blog</h1>
-      <div>
-        <InstagramGallery />
-      </div>
+    <div className="p-20">
+      <InstagramGallery />
     </div>
   );
 }
 
-//  Blog;

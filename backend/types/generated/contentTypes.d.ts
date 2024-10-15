@@ -983,6 +983,37 @@ export interface ApiImageImage extends Schema.CollectionType {
   };
 }
 
+export interface ApiInstagramFeedInstagramFeed extends Schema.CollectionType {
+  collectionName: 'instagram-feeds';
+  info: {
+    singularName: 'instagram-feed';
+    pluralName: 'instagram-feeds';
+    displayName: 'InstagramFeed';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    feedId: Attribute.UID;
+    tagName: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::instagram-feed.instagram-feed',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::instagram-feed.instagram-feed',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiMainMain extends Schema.SingleType {
   collectionName: 'mains';
   info: {
@@ -1067,6 +1098,12 @@ export interface ApiMainMain extends Schema.SingleType {
         };
       }>;
     instaMediaTwo: Attribute.Media<'images'> &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    parallaxImages: Attribute.Media<'images', true> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -1160,6 +1197,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::category.category': ApiCategoryCategory;
       'api::image.image': ApiImageImage;
+      'api::instagram-feed.instagram-feed': ApiInstagramFeedInstagramFeed;
       'api::main.main': ApiMainMain;
       'api::tag.tag': ApiTagTag;
     }

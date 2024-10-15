@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "instagram-feeds",
+  "info": {
+    "singularName": "instagram-feed",
+    "pluralName": "instagram-feeds",
+    "displayName": "InstagramFeed",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "feedId": {
+      "type": "uid"
+    },
+    "tagName": {
+      "type": "string"
+    }
+  }
+}

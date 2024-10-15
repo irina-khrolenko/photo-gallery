@@ -5,18 +5,27 @@ import {
 } from "@/services/CollectionsService";
 import { create } from "zustand";
 
+interface Pagination {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
+}
+
 interface CollectionsData {
   collections: Category_Plain[];
   tags: (Tag_Plain & { isChecked: boolean })[];
   images: (Image_Plain & { tags: string[]; image: string })[];
+  imagesPagination: Pagination;
 }
 
 export interface CollectionsDataState extends CollectionsData {
   setCollections: (locale: string) => void;
   setTags: (locale: string, category?: string) => void;
   setImages: (locale: string, filters?: any) => void;
-  changeTagSelection: (tag: string) => void;
-  clearCollections: () => void;
+  changeTagsSelection: (tags: string[]) => void;
+  setImagesPagination: (pagination: Pagination) => void;
+  clearData: () => void;
 }
 
 const getCollectionsData = async (
@@ -58,11 +67,22 @@ const getTagsData = async (
 
 const getImagesData = async (
   set: (data: Partial<CollectionsDataState>) => void,
-  locale: string,
-  tags?: string[]
+  get: () => CollectionsDataState,
+  locale: string
 ) => {
   try {
-    const data: Image[] = await fetchImages(locale, tags);
+    const selectedTags = get().tags?.some((tag) => tag.isChecked)
+      ? get()
+          .tags?.filter((tag) => tag.isChecked)
+          .map((tag) => tag.name)
+      : get().tags?.map((tag) => tag.name);
+    const result = await fetchImages(
+      locale,
+      get().imagesPagination,
+      selectedTags
+    );
+    const data: Image[] = result.data;
+    const pagination = result.meta.pagination;
     const images = data?.map((image) => {
       const url = image?.attributes?.image?.data
         ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${image?.attributes?.image?.data?.attributes?.url}`
@@ -72,49 +92,60 @@ const getImagesData = async (
       );
       return { ...image.attributes, id: image.id, image: url, tags };
     });
-    set({ images } as any);
+    set({
+      images,
+      imagesPagination: pagination,
+    } as any);
   } catch (error) {
     console.error("Error fetching main data:", error);
   }
 };
 
-const changeTagSelection = (
+const changeTagsSelection = (
   set: (
     data:
       | Partial<CollectionsDataState>
       | ((state: CollectionsDataState) => Partial<CollectionsDataState>)
   ) => void,
-  selectedTag: string
+  selectedTags: string[]
 ) => {
   set((state) => ({
     ...state,
     tags: state.tags.map((tag) => {
       return {
         ...tag,
-        isChecked: tag.name === selectedTag ? !tag.isChecked : tag.isChecked,
+        isChecked: selectedTags.includes(tag.name)
+          ? !tag.isChecked
+          : tag.isChecked,
       };
     }),
   }));
 };
 
-const clearCollectionsData = (
-  set: (partial: Partial<CollectionsDataState>) => void
+const clearData = (set: (partial: Partial<CollectionsDataState>) => void) => {
+  set({ collections: [], images: [], tags: [] });
+};
+const setImagesPagination = (
+  set: (partial: Partial<CollectionsDataState>) => void,
+  pagination: Pagination
 ) => {
-  set({ collections: [] });
+  set({ imagesPagination: pagination });
 };
 
-const useCollectionsStore = create<CollectionsDataState>((set) => ({
+const useCollectionsStore = create<CollectionsDataState>((set, get) => ({
   collections: [],
   tags: [],
   images: [],
+  imagesPagination: { page: 1, pageSize: 10 } as Pagination,
+  setImagesPagination: (pagination: Pagination) =>
+    setImagesPagination(set, pagination),
   setCollections: async (locale: string) =>
     await getCollectionsData(set, locale),
   setTags: async (locale: string, category?: string) =>
     await getTagsData(set, locale, category),
-  setImages: async (locale: string, filters: any) =>
-    await getImagesData(set, locale, filters),
-  clearCollections: () => clearCollectionsData(set),
-  changeTagSelection: (tag: any) => changeTagSelection(set, tag),
+  setImages: async (locale: string) => await getImagesData(set, get, locale),
+  clearData: () => clearData(set),
+  changeTagsSelection: (tags: any[]) => changeTagsSelection(set, tags),
 }));
 
 export default useCollectionsStore;

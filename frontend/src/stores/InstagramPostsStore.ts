@@ -1,11 +1,10 @@
 // InstagramPostsStore
+import { fetchInstagramFeeds } from "@/services/InstagramPostsService";
 import { create } from "zustand";
 
 export interface PostData {
-  url: string;
-  width: number;
-  height: number;
-  aspectRatio: number;
+  tagName: string;
+  feedId: string;
 }
 
 interface InstagramPostData {
@@ -17,11 +16,16 @@ export interface InstagramPostsState extends InstagramPostData {
   clearPostsData: () => void;
 }
 
-const getPostsData = async (
+const getInstagramFeeds = async (
   set: (partial: Partial<InstagramPostsState>) => void
 ) => {
   try {
-    set({ posts: [] });
+    const response: any = await fetchInstagramFeeds();
+    const feeds = response?.map((feed: InstagramFeed) => ({
+      feedId: feed.attributes.feedId,
+      tagName: feed.attributes.tagName,
+    }));
+    set({ posts: feeds });
   } catch (error: any) {
     console.log("error", error);
   }
@@ -35,7 +39,7 @@ const clearPostsData = (
 
 const useInstagramPostsStore = create<InstagramPostsState>((set) => ({
   posts: [],
-  setPosts: async () => await getPostsData(set),
+  setPosts: async () => await getInstagramFeeds(set),
   clearPostsData: () => clearPostsData(set),
 }));
 

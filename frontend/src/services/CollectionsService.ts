@@ -20,6 +20,7 @@ export async function fetchTags(locale: string, category?: string) {
         populate: "*",
         locale,
         ...(category && { filters: { categories: { category } } }),
+        sort: "createdAt",
       }
     );
     return result.data;
@@ -28,7 +29,11 @@ export async function fetchTags(locale: string, category?: string) {
   }
 }
 
-export async function fetchImages(locale: string, tags?: string[]) {
+export async function fetchImages(
+  locale: string,
+  pagination: any,
+  tags?: string[]
+) {
   try {
     const result = await fetcher(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/images`,
@@ -36,9 +41,15 @@ export async function fetchImages(locale: string, tags?: string[]) {
         populate: "*",
         locale,
         ...(tags?.length && { filters: { tags: { name: { $in: tags } } } }),
+        sort: "createdAt",
+        pagination: {
+          withCount: true,
+          pageSize: pagination.pageSize,
+          page: pagination.page,
+        },
       }
     );
-    return result.data;
+    return result;
   } catch (err) {
     console.log("err", err);
   }

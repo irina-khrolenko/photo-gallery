@@ -11,3 +11,4 @@
 /// <reference path="./User.d.ts" />
 
 // export {};
+/// <reference path="./instagram-feed.d.ts" />

@@ -18,6 +18,7 @@ export interface Main {
     instaMockup?: { data: Media };
     instaMediaOne?: { data: Media };
     instaMediaTwo?: { data: Media };
+    parallaxImages?: { data: Media[] };
     locale: string;
     localizations?: { data: Main[] };
   };
@@ -35,6 +36,7 @@ export interface Main_Plain {
   instaMockup?: Media_Plain;
   instaMediaOne?: Media_Plain;
   instaMediaTwo?: Media_Plain;
+  parallaxImages?: Media_Plain[];
   locale: string;
   localizations?: Main_Plain[];
 }
@@ -52,6 +54,7 @@ export interface Main_NoRelations {
   instaMockup?: number;
   instaMediaOne?: number;
   instaMediaTwo?: number;
+  parallaxImages?: number[];
   locale: string;
   localizations?: Main[];
 }
@@ -69,6 +72,7 @@ export interface Main_AdminPanelLifeCycle {
   instaMockup?: AdminPanelRelationPropertyModification<Media_Plain>;
   instaMediaOne?: AdminPanelRelationPropertyModification<Media_Plain>;
   instaMediaTwo?: AdminPanelRelationPropertyModification<Media_Plain>;
+  parallaxImages?: AdminPanelRelationPropertyModification<Media_Plain>[];
   locale: string;
   localizations?: Main[];
 }

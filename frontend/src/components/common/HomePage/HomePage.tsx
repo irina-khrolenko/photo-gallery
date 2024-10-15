@@ -6,7 +6,7 @@ import {
   AvatarBlock,
   ChatMessage,
   Collections,
-  HomeImage,
+  ParallaxImage,
   SmartphoneVideo,
   ViewAllSlider,
 } from "../..";
@@ -16,7 +16,7 @@ export const HomePage = () => {
   const t = useTranslations("Messages");
   const {
     setMainData,
-    mainImage,
+    parallaxImages,
     mainText,
     mainAvatar,
     mainVideo,
@@ -42,7 +42,7 @@ export const HomePage = () => {
 
   return (
     <div className="w-full overflow-hidden ">
-      <HomeImage mainImage={mainImage} />
+      <ParallaxImage textureUrls={parallaxImages} />
       <div className="flex items-center space-x-4 justify-between px-[15%] py-[150px]">
         <AvatarBlock mainAvatar={mainAvatar} />
         <AboutInfo mainText={mainText} />
