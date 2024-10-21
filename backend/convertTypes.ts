@@ -5,6 +5,7 @@ const ts = require("typescript");
 const sourceFolders = [
   path.resolve(__dirname, "./generated-interfaces/api"),
   path.resolve(__dirname, "./generated-interfaces/common"),
+  path.resolve(__dirname, "./generated-interfaces/components"),
 ];
 const targetFolder = "../frontend/sharedTypes";
 
