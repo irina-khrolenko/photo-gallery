@@ -6,7 +6,7 @@ const sourceFolders = [
   path.resolve(__dirname, "./generated-interfaces/api"),
   path.resolve(__dirname, "./generated-interfaces/common"),
 ];
-const targetFolder = "../sharedTypes";
+const targetFolder = "../frontend/sharedTypes";
 
 const indexFilePath = path.join(targetFolder, "index.d.ts");
 

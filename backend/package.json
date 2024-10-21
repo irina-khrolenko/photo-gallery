@@ -8,7 +8,9 @@
     "name": "A Strapi developer"
   },
   "scripts": {
-    "build": "strapi build  && node convertTypes.ts",
+    "build": "strapi build",
+    "build-dev": "strapi build  && node convertTypes.ts",
+    "convert-types": "node convertTypes.ts",
     "deploy": "strapi deploy",
     "develop": "cross-env NODE_ENV=development strapi develop",
     "start": "strapi start",
@@ -20,6 +22,7 @@
     "@strapi/plugin-users-permissions": "4.25.0",
     "@strapi/strapi": "4.25.0",
     "better-sqlite3": "8.6.0",
+    "npm-scripts": "^1.4.0",
     "pg": "^8.12.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
