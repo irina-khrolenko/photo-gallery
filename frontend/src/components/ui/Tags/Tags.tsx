@@ -10,7 +10,7 @@ export const Tags = ({ tags, changeTagsSelection, collections }: TagsProps) => {
     return tags?.filter((tag) => tag.categories?.includes(collection as any));
   };
   return (
-    <Box className="relative my-10">
+    <Box component="div" className="relative my-10">
       <Stack direction="row" flexWrap={"wrap"} gap={1}>
         {collections?.length ? (
           <Paper

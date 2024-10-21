@@ -9,7 +9,7 @@ export const AboutInfo = ({ mainText }: AboutInfoProps) => {
     <>
       {mainText?.length ? (
         <Stack direction="row" justifyContent="space-between" spacing={1}>
-          <Box width="80%" maxWidth={700}>
+          <Box component="div" width="80%" maxWidth={700}>
             <BlockRendererClient content={mainText} />
           </Box>
         </Stack>

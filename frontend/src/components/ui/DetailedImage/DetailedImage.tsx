@@ -20,6 +20,7 @@ export const DetailedImage = ({
       aria-describedby="modal-modal-description"
     >
       <Box
+        component="div"
         sx={{
           position: "absolute",
           top: "50%",

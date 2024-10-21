@@ -31,6 +31,7 @@ export const Collections = () => {
   return (
     <>
       <Box
+        component="div"
         sx={{
           position: "relative",
           width: "80%",
@@ -38,6 +39,7 @@ export const Collections = () => {
         }}
       >
         <Box
+          component="div"
           sx={{
             position: "absolute",
             width: "80%",

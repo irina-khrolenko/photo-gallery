@@ -9,8 +9,12 @@ export const ViewAllSlider = ({
 }: ViewAllSliderProps) => {
   return (
     <>
-      <Box className="w-screen h-[30vh] flex justify-center items-center">
+      <Box
+        component="div"
+        className="w-screen h-[30vh] flex justify-center items-center"
+      >
         <Box
+          component="div"
           className="w-full h-[30vh]"
           sx={{
             backgroundImage: `
@@ -21,7 +25,10 @@ export const ViewAllSlider = ({
             backgroundPosition: "center",
           }}
         >
-          <Box className="w-full h-full flex flex-col justify-center items-center">
+          <Box
+            component="div"
+            className="w-full h-full flex flex-col justify-center items-center"
+          >
             <Button>
               <Link href="/gallery">
                 <Typography variant="h5" component="h2">

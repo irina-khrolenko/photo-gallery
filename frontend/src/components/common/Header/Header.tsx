@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { LanguageButton } from "../..";
 import Link from "next/link";
+import { LanguageButton } from "../..";
 import { useTranslations } from "next-intl";
 
 export const Header = () => {
@@ -14,6 +14,7 @@ export const Header = () => {
 
   return (
     <Box
+      component="div"
       sx={{
         display: "flex",
         alignItems: "center",
@@ -22,7 +23,7 @@ export const Header = () => {
       }}
       className="w-full px-20 py-4"
     >
-      <Box className="w-fit">
+      <Box component="div" className="w-fit">
         <Link href="/">
           <Typography
             variant="h6"
@@ -34,7 +35,11 @@ export const Header = () => {
           </Typography>
         </Link>
       </Box>
-      <Box sx={{ display: { xs: "none", sm: "block" } }} className="w-fit">
+      <Box
+        component="div"
+        sx={{ display: { xs: "none", sm: "block" } }}
+        className="w-fit"
+      >
         {navItems.map((item) => (
           <Link href={item.url} key={item.url}>
             <Button key={item.url} sx={{ color: "#fff" }}>

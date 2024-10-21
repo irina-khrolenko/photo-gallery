@@ -19,11 +19,7 @@ export default function BlockRendererClient({
           <p className="text-neutral900 max-w-prose">{children}</p>
         ),
         heading: ({ children, level }) => {
-          return (
-            <Typography variant={`h${level}`}>{children}</Typography> || (
-              <Typography variant="h1">{children}</Typography>
-            )
-          );
+          return <Typography variant={`h${level}`}>{children}</Typography>;
         },
       }}
     />

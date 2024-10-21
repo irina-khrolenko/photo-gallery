@@ -4,9 +4,13 @@ import { HomeImageProps } from "./HomeImage.props";
 
 export const HomeImage = ({ mainImage }: HomeImageProps) => {
   return (
-    <Box className="w-screen h-[70vh] flex justify-center items-center">
+    <Box
+      component="div"
+      className="w-screen h-[70vh] flex justify-center items-center"
+    >
       {mainImage ? (
         <Box
+          component="div"
           className="w-full h-[70vh]"
           sx={{
             backgroundImage: `url(${mainImage})`,

@@ -10,6 +10,7 @@ export const PhoneWithMedia = ({
 }: PhoneWithMediaProps) => {
   return (
     <Box
+      component="div"
       className="relative flex justify-center items-center min-w-[160px]"
       sx={styles || {}}
     >

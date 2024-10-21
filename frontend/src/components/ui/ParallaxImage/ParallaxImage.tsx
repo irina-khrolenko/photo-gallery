@@ -24,8 +24,8 @@ const ParallaxLayer = React.memo(
     const { viewport } = useThree();
 
     const aspectRatio = 16 / 9;
-    const fixedWidth = viewport.width * 0.25;
-    const fixedHeight = fixedWidth / aspectRatio;
+    const fixedHeight = viewport.height * 0.3;
+    const fixedWidth = fixedHeight * aspectRatio;
 
     useEffect(() => {
       if (ref.current) {
