@@ -25,32 +25,31 @@ const getMainInfoData = async (
 ) => {
   try {
     const data = await fetchMainInfoData(locale);
-    const mainAvatar = `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.avatar.data.attributes.url}`;
+    const mainAvatar = `${data.avatar.data.attributes.url}`;
     const mainImage = data.mainImage?.data
-      ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.mainImage.data.attributes.url}`
+      ? `${data.mainImage.data.attributes.url}`
       : "";
     const mainVideo = data.mainVideo?.data
-      ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.mainVideo.data.attributes.url}`
+      ? `${data.mainVideo.data.attributes.url}`
       : "";
     const phoneMockup = data.phoneMockup?.data
-      ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.phoneMockup.data.attributes.url}`
+      ? `${data.phoneMockup.data.attributes.url}`
       : "";
     const sliderImage = data.sliderImage?.data
-      ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.sliderImage.data.attributes.url}`
+      ? `${data.sliderImage.data.attributes.url}`
       : "";
     const instaLikes = data.instaLikes?.data
-      ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.instaLikes.data.attributes.url}`
+      ? `${data.instaLikes.data.attributes.url}`
       : "";
     const instaMockup = data.instaMockup?.data
-      ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.instaMockup.data.attributes.url}`
+      ? `${data.instaMockup.data.attributes.url}`
       : "";
     const parallaxImages = data.parallaxImages?.data?.length
       ? data.parallaxImages.data
-          ?.map((image: Media) => image.attributes?.url)
-          ?.sort()
-          ?.map(
-            (image: string) => `${process.env.NEXT_PUBLIC_STRAPI_URL}${image}`
+          ?.sort((a: Media, b: Media) =>
+            a.attributes.name.localeCompare(b.attributes.name)
           )
+          ?.map((image: Media) => image.attributes?.url)
       : [];
     const mainData = {
       mainImage,

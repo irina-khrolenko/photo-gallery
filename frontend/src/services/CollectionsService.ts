@@ -3,7 +3,7 @@ import { fetcher } from "@/lib/api";
 export async function fetchCollections(locale: string) {
   try {
     const result = await fetcher(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/categories`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/categories`,
       { populate: "*", locale }
     );
     return result.data;
@@ -14,15 +14,12 @@ export async function fetchCollections(locale: string) {
 
 export async function fetchTags(locale: string, category?: string) {
   try {
-    const result = await fetcher(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/tags`,
-      {
-        populate: "*",
-        locale,
-        ...(category && { filters: { categories: { category } } }),
-        sort: "createdAt",
-      }
-    );
+    const result = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/tags`, {
+      populate: "*",
+      locale,
+      ...(category && { filters: { categories: { category } } }),
+      sort: "createdAt",
+    });
     return result.data;
   } catch (err) {
     console.log("err", err);
@@ -36,7 +33,7 @@ export async function fetchImages(
 ) {
   try {
     const result = await fetcher(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/images`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/images`,
       {
         populate: "*",
         locale,

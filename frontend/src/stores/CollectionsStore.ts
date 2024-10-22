@@ -36,7 +36,7 @@ const getCollectionsData = async (
     const data = await fetchCollections(locale);
     const collections = data?.map((collection: any) => {
       const coverImage = collection.attributes.coverImage?.data
-        ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${collection.attributes.coverImage.data.attributes.url}`
+        ? `${collection.attributes.coverImage.data.attributes.url}`
         : "";
       return { ...collection.attributes, coverImage, id: collection.id };
     });
@@ -85,7 +85,7 @@ const getImagesData = async (
     const pagination = result.meta.pagination;
     const images = data?.map((image) => {
       const url = image?.attributes?.image?.data
-        ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${image?.attributes?.image?.data?.attributes?.url}`
+        ? `${image?.attributes?.image?.data?.attributes?.url}`
         : "";
       const tags: string[] = image.attributes.tags?.data?.map(
         (tag) => tag?.attributes?.name
