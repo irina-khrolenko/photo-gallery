@@ -30,8 +30,7 @@ module.exports = [
   {
     name: "strapi::cors",
     config: {
-      enabled: true,
-      origin: [process.env.APP_URL],
+      origin: process.env.APP_URLS.split(",").map((url) => url.trim()),
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       headers: ["Content-Type", "Authorization", "Origin", "Accept"],
     },
