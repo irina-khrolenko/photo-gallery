@@ -1,5 +1,7 @@
+import { ImagePlainData } from "@/stores/CollectionsStore";
+
 export interface DetailedImageProps {
   isImageOpen: boolean;
   handleCloseModal: () => void;
-  image: Image_Plain & { tags: string[]; image: string };
+  image: ImagePlainData;
 }

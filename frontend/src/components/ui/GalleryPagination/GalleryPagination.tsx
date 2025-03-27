@@ -13,7 +13,6 @@ export const GalleryPagination = ({
   handleChangePageSize,
   handleChangePage,
 }: GalleryPaginationProps) => {
-  console.log("pageSize", pageSize);
   const t = useTranslations("");
   return (
     <div className="flex w-full justify-end p-4 items-center">

@@ -5,20 +5,21 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import { GalleryImagesProps } from "./GalleryImages.props";
 import { DetailedImage } from "../DetailedImage/DetailedImage";
 import { useState } from "react";
+import { ImagePlainData } from "@/stores/CollectionsStore";
 
 export const GalleryImages = ({ images }: GalleryImagesProps) => {
   const [isImageOpen, setIsImageOpen] = useState(false);
-  const [currentImage, setCurrentImage] = useState<any>({});
+  const [currentImage, setCurrentImage] = useState<ImagePlainData>(
+    {} as ImagePlainData
+  );
 
-  const handleOpenImage = (
-    image: Image_Plain & { tags: string[]; image: string }
-  ) => {
+  const handleOpenImage = (image: ImagePlainData) => {
     setIsImageOpen(true);
     setCurrentImage(image);
   };
   const handleCloseImage = () => {
     setIsImageOpen(false);
-    setCurrentImage({});
+    setCurrentImage({} as ImagePlainData);
   };
   return (
     <>
@@ -54,7 +55,7 @@ export const GalleryImages = ({ images }: GalleryImagesProps) => {
                   {item.tags?.map((v: string, index: number) => (
                     <span className="mr-1" key={v}>
                       #{v}
-                      {index !== item.tags?.length - 1 && ","}
+                      {index !== (item.tags?.length || 0) - 1 && ","}
                     </span>
                   ))}
                 </div>

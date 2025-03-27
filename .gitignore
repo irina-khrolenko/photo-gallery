@@ -105,7 +105,6 @@ coverage
 # Strapi
 ############################
 
-.env
 license.txt
 exports
 .strapi
@@ -155,3 +154,4 @@ next-env.d.ts
 
 .vscode
 
+config.bat

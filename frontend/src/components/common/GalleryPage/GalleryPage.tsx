@@ -2,70 +2,71 @@
 
 import useMainDataStore from "@/stores/MainDataStore";
 import { ChatMessage, GalleryImages, GalleryPagination, Tags } from "../..";
-import useCollectionsStore from "@/stores/CollectionsStore";
+import useCollectionsStore, {
+  CollectionsData,
+} from "@/stores/CollectionsStore";
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-export const GalleryPage = () => {
+export const GalleryPage = ({
+  collectionsData,
+}: {
+  collectionsData?: CollectionsData;
+}) => {
   const t = useTranslations("Messages");
   const locale = useLocale();
-  const pathname = usePathname();
   const collectionsStore = useCollectionsStore((state) => state);
-  const { setMainData, mainAvatar } = useMainDataStore((state) => state);
-  const fetchData = async () => {
-    let category = "";
-    collectionsStore.clearData();
-    if (!pathname.endsWith("gallery")) {
-      category = pathname.replace("/gallery/", "");
-    } else {
-      if (typeof collectionsStore.setCollections === "function") {
+  const { mainAvatar } = useMainDataStore((state) => state);
+
+  const fetchImages = async () => {
+    if (typeof collectionsStore.fetchImages === "function") {
+      try {
+        await collectionsStore.fetchImages(locale);
+      } catch (error) {
+        console.error("Failed to set main data", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (collectionsData) {
+      if (
+        typeof collectionsStore.setCollections === "function" &&
+        collectionsData.collections
+      ) {
         try {
-          await collectionsStore.setCollections(locale);
+          collectionsStore.setCollections(collectionsData.collections);
+        } catch (error) {
+          console.error("Failed to set main data", error);
+        }
+      }
+      if (
+        typeof collectionsStore.setTags === "function" &&
+        collectionsData.tags
+      ) {
+        try {
+          collectionsStore.setTags(collectionsData.tags);
+        } catch (error) {
+          console.error("Failed to set main data", error);
+        }
+      }
+      if (
+        typeof collectionsStore.setImages === "function" &&
+        collectionsData.images
+      ) {
+        try {
+          collectionsStore.setImages(collectionsData.images);
         } catch (error) {
           console.error("Failed to set main data", error);
         }
       }
     }
-    if (typeof collectionsStore.setTags === "function") {
-      try {
-        await collectionsStore.setTags(locale, category);
-      } catch (error) {
-        console.error("Failed to set main data", error);
-      }
-    }
-  };
-
-  const fetchImages = async () => {
-    if (typeof collectionsStore.setImages === "function") {
-      try {
-        await collectionsStore.setImages(locale);
-      } catch (error) {
-        console.error("Failed to set main data", error);
-      }
-    }
-  };
-
-  const fetchMainData = async () => {
-    if (typeof setMainData === "function") {
-      try {
-        await setMainData(locale);
-      } catch (error) {
-        console.error("Failed to set main data", error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-    fetchMainData();
-  }, [locale]);
+  }, [collectionsData]);
 
   useEffect(() => {
     fetchImages();
   }, [
     collectionsStore.tags,
-    locale,
     collectionsStore.imagesPagination.page,
     collectionsStore.imagesPagination.pageSize,
   ]);

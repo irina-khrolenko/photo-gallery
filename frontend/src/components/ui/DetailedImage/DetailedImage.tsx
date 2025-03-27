@@ -67,7 +67,7 @@ export const DetailedImage = ({
                   {image.tags?.map((v: string, index: number) => (
                     <span className="mr-1 text-sm">
                       #{v}
-                      {index !== image.tags?.length - 1 && ","}
+                      {index !== (image.tags?.length || 0) - 1 && ","}
                     </span>
                   ))}
                 </Typography>

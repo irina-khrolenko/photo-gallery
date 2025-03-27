@@ -1,27 +1,23 @@
 "use client";
 import { ChatMessage, PhonesInstagram } from "@/components";
-import useMainDataStore from "@/stores/MainDataStore";
-import { useLocale, useTranslations } from "next-intl";
+import useMainDataStore, { MainData } from "@/stores/MainDataStore";
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 
-export const Footer = () => {
+export const Footer = ({ mainData }: { mainData?: MainData }) => {
   const t = useTranslations("Messages");
-  const locale = useLocale();
   const { setMainData, mainAvatar, phoneMockup, instaLikes, instaMockup } =
     useMainDataStore((state) => state);
-  const fetchData = async () => {
-    if (typeof setMainData === "function") {
+
+  useEffect(() => {
+    if (typeof setMainData === "function" && mainData) {
       try {
-        await setMainData(locale);
+        setMainData(mainData);
       } catch (error) {
         console.error("Failed to set main data", error);
       }
     }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [locale]);
+  }, [mainData]);
 
   return (
     <div className="w-full bg-gallery-darkGreen overflow-hidden flex justify-between items-center px-20">

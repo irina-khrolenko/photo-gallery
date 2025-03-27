@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "./styles/globals.css";
 import { Footer, Header } from "@/components";
+import { fetchMainInfoData } from "@/services/MainDataService";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -26,7 +27,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const messages = await getMessages({ locale });
-
+  const mainData = await fetchMainInfoData(locale);
   return (
     <html lang={locale}>
       <body className={roboto.className}>
@@ -35,7 +36,7 @@ export default async function RootLayout({
             <NextIntlClientProvider messages={messages} locale={locale}>
               <Header />
               {children}
-              <Footer />
+              <Footer mainData={mainData} />
             </NextIntlClientProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
