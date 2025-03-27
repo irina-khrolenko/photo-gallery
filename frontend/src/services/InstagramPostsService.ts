@@ -5,7 +5,11 @@ export async function fetchInstagramFeeds() {
     const result = await fetcher(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/instagram-feeds`
     );
-    return result.data;
+    const feeds = result.data?.map((feed: InstagramFeed) => ({
+      feedId: feed.attributes.feedId,
+      tagName: feed.attributes.tagName,
+    }));
+    return feeds;
   } catch (err) {
     console.log("err", err);
   }

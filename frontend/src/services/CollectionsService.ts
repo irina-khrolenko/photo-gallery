@@ -6,7 +6,13 @@ export async function fetchCollections(locale: string) {
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/categories`,
       { populate: "*", locale }
     );
-    return result.data;
+    const collections = result.data?.map((collection: any) => {
+      const coverImage = collection.attributes.coverImage?.data
+        ? `${collection.attributes.coverImage.data.attributes.url}`
+        : "";
+      return { ...collection.attributes, coverImage, id: collection.id };
+    });
+    return collections;
   } catch (err) {
     console.log("err", err);
   }
@@ -20,7 +26,13 @@ export async function fetchTags(locale: string, category?: string) {
       ...(category && { filters: { categories: { category } } }),
       sort: "createdAt",
     });
-    return result.data;
+    const tags = result.data?.map((tag: Tag) => {
+      const categories = tag.attributes.categories?.data?.map(
+        (category: any) => category?.attributes?.name
+      );
+      return { ...tag.attributes, id: tag.id, categories, isChecked: false };
+    });
+    return tags;
   } catch (err) {
     console.log("err", err);
   }
@@ -46,7 +58,18 @@ export async function fetchImages(
         },
       }
     );
-    return result;
+    const data: Image[] = result.data;
+    const newPagination = result.meta.pagination;
+    const images: any[] = data?.map((image) => {
+      const url = image?.attributes?.image?.data
+        ? `${image?.attributes?.image?.data?.attributes?.url}`
+        : "";
+      const tags: string[] = image.attributes.tags?.data?.map(
+        (tag) => tag?.attributes?.name
+      );
+      return { ...image.attributes, id: image.id, image: url, tags };
+    });
+    return { images, imagesPagination: newPagination };
   } catch (err) {
     console.log("err", err);
   }

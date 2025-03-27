@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 import useMainDataStore from "@/stores/MainDataStore";
 import {
   AboutInfo,
@@ -10,12 +9,15 @@ import {
   SmartphoneVideo,
   ViewAllSlider,
 } from "../..";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
-export const HomePage = () => {
+export const HomePage = ({
+  collections,
+}: {
+  collections?: Category_Plain[];
+}) => {
   const t = useTranslations("Messages");
   const {
-    setMainData,
     parallaxImages,
     mainText,
     mainAvatar,
@@ -24,21 +26,6 @@ export const HomePage = () => {
     sliderImage,
     sliderText,
   } = useMainDataStore((state) => state);
-  const locale = useLocale();
-
-  const fetchData = async () => {
-    if (typeof setMainData === "function") {
-      try {
-        await setMainData(locale);
-      } catch (error) {
-        console.error("Failed to set main data", error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [locale]);
 
   return (
     <div className="w-full overflow-hidden ">
@@ -53,7 +40,7 @@ export const HomePage = () => {
         <ChatMessage mainAvatar={mainAvatar} messagesList={[t("portfolio")]} />
       </div>
       <div className="flex items-center space-x-4 justify-center px-20 py-20">
-        <Collections />
+        <Collections collectionsList={collections} />
       </div>
     </div>
   );

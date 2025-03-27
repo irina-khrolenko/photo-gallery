@@ -1,10 +1,14 @@
 import { HomePage } from "@/components";
+import { fetchCollections } from "@/services/CollectionsService";
+import { getLocale } from "next-intl/server";
 
-export default function Home() {
+export default async function Home() {
+  const locale = await getLocale();
+  const collections = await fetchCollections(locale);
   return (
     <div>
       <main>
-        <HomePage />
+        <HomePage collections={collections} />
       </main>
     </div>
   );

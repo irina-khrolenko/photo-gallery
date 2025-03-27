@@ -6,18 +6,15 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import BeholdWidget from "@behold/react";
 import { ChatMessage } from "@/components/ui/ChatMessage/ChatMessage";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import useMainDataStore from "@/stores/MainDataStore";
-import useInstagramPostsStore from "@/stores/InstagramPostsStore";
+import useInstagramPostsStore, { PostData } from "@/stores/InstagramPostsStore";
 
-export const InstagramGallery = () => {
+export const InstagramGallery = ({ postsData }: { postsData?: PostData[] }) => {
   const t = useTranslations("Messages");
-  const locale = useLocale();
-  const { setMainData, mainAvatar } = useMainDataStore((state) => state);
+  const { mainAvatar } = useMainDataStore((state) => state);
   const { posts, setPosts } = useInstagramPostsStore((state) => state);
   useEffect(() => {
-    fetchInstaFeeds();
-    fetchMainData();
     const beholdScript = document.createElement("script");
     beholdScript.src = "https://behold.so/widget.js";
     beholdScript.async = true;
@@ -28,24 +25,11 @@ export const InstagramGallery = () => {
     };
   }, []);
 
-  const fetchMainData = async () => {
-    if (typeof setMainData === "function") {
-      try {
-        await setMainData(locale);
-      } catch (error) {
-        console.error("Failed to set main data", error);
-      }
+  useEffect(() => {
+    if (typeof setPosts === "function" && postsData?.length) {
+      setPosts(postsData);
     }
-  };
-  const fetchInstaFeeds = async () => {
-    if (typeof setPosts === "function") {
-      try {
-        await setPosts();
-      } catch (error) {
-        console.error("Failed to set main data", error);
-      }
-    }
-  };
+  }, [postsData]);
 
   return (
     <div className="w-full">

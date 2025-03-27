@@ -55,10 +55,10 @@ const ParallaxLayer = React.memo(
   }
 );
 
-const ParallaxEffect = ({ textureUrls }: { textureUrls: string[] }) => {
+const ParallaxEffect = ({ textureUrls }: { textureUrls?: string[] }) => {
   return (
     <>
-      {textureUrls.map((url, index) => (
+      {textureUrls?.map((url, index) => (
         <ParallaxLayer texturePath={url} depth={index} />
       ))}
     </>

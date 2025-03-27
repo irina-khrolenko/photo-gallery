@@ -1,7 +1,7 @@
 import { fetchMainInfoData } from "@/services/MainDataService";
 import { create } from "zustand";
 
-interface MainData {
+export interface MainData {
   mainImage: string;
   mainText: string[];
   mainAvatar: string;
@@ -15,7 +15,8 @@ interface MainData {
 }
 
 export interface MainDataState extends MainData {
-  setMainData: (locale: string) => void;
+  fetchMainData: (locale: string) => void;
+  setMainData: (mainData: MainData) => void;
   clearMainData: () => void;
 }
 
@@ -24,46 +25,8 @@ const getMainInfoData = async (
   locale: string
 ) => {
   try {
-    const data = await fetchMainInfoData(locale);
-    const mainAvatar = `${data.avatar.data.attributes.url}`;
-    const mainImage = data.mainImage?.data
-      ? `${data.mainImage.data.attributes.url}`
-      : "";
-    const mainVideo = data.mainVideo?.data
-      ? `${data.mainVideo.data.attributes.url}`
-      : "";
-    const phoneMockup = data.phoneMockup?.data
-      ? `${data.phoneMockup.data.attributes.url}`
-      : "";
-    const sliderImage = data.sliderImage?.data
-      ? `${data.sliderImage.data.attributes.url}`
-      : "";
-    const instaLikes = data.instaLikes?.data
-      ? `${data.instaLikes.data.attributes.url}`
-      : "";
-    const instaMockup = data.instaMockup?.data
-      ? `${data.instaMockup.data.attributes.url}`
-      : "";
-    const parallaxImages = data.parallaxImages?.data?.length
-      ? data.parallaxImages.data
-          ?.sort((a: Media, b: Media) =>
-            a.attributes.name.localeCompare(b.attributes.name)
-          )
-          ?.map((image: Media) => image.attributes?.url)
-      : [];
-    const mainData = {
-      mainImage,
-      mainText: data.mainText,
-      mainAvatar,
-      mainVideo,
-      phoneMockup,
-      instaLikes,
-      instaMockup,
-      sliderImage,
-      parallaxImages,
-      sliderText: data.sliderText,
-    };
-    set(mainData);
+    const mainData = await fetchMainInfoData(locale);
+    if (mainData) set(mainData);
   } catch (error) {
     console.error("Error fetching main data:", error);
   }
@@ -71,6 +34,13 @@ const getMainInfoData = async (
 
 const clearMainData = (set: (partial: Partial<MainDataState>) => void) => {
   set({ mainImage: "", mainText: [], mainAvatar: "", parallaxImages: [] });
+};
+
+const setMainData = (
+  set: (partial: Partial<MainDataState>) => void,
+  mainData: MainData
+) => {
+  set(mainData);
 };
 
 const useMainDataStore = create<MainDataState>((set) => ({
@@ -85,7 +55,8 @@ const useMainDataStore = create<MainDataState>((set) => ({
   instaMockup: "",
   instaLikes: "",
   parallaxImages: [],
-  setMainData: async (locale: string) => await getMainInfoData(set, locale),
+  setMainData: (mainData: MainData) => setMainData(set, mainData),
+  fetchMainData: async (locale: string) => await getMainInfoData(set, locale),
   clearMainData: () => clearMainData(set),
 }));
 

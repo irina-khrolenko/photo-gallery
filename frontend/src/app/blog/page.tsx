@@ -1,4 +1,5 @@
 import { InstagramGallery } from "@/components";
+import { fetchInstagramFeeds } from "@/services/InstagramPostsService";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,9 +13,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Blog() {
+  const feeds = await fetchInstagramFeeds();
   return (
     <div className="p-20">
-      <InstagramGallery />
+      <InstagramGallery postsData={feeds} />
     </div>
   );
 }

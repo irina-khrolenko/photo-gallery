@@ -8,8 +8,8 @@ import { useTranslations } from "next-intl";
 export const Header = () => {
   const t = useTranslations("Header");
   const navItems = [
-    { name: t("gallery"), url: "gallery" },
-    { name: t("blog"), url: "blog" },
+    { name: t("gallery"), url: "/gallery" },
+    { name: t("blog"), url: "/blog" },
   ];
 
   return (

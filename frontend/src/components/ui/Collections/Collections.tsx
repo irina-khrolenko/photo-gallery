@@ -8,25 +8,24 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import ListSubheader from "@mui/material/ListSubheader";
 import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
-export const Collections = () => {
+export const Collections = ({
+  collectionsList,
+}: {
+  collectionsList?: Category_Plain[];
+}) => {
   const t = useTranslations();
-  const locale = useLocale();
   const { collections, setCollections } = useCollectionsStore((state) => state);
-  const fetchData = async () => {
-    if (typeof setCollections === "function") {
+  useEffect(() => {
+    if (typeof setCollections === "function" && collectionsList) {
       try {
-        await setCollections(locale);
+        setCollections(collectionsList);
       } catch (error) {
         console.error("Failed to set main data", error);
       }
     }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [locale]);
+  }, [collectionsList]);
 
   return (
     <>

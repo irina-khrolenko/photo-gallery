@@ -12,17 +12,28 @@ interface Pagination {
   total: number;
 }
 
-interface CollectionsData {
+interface TagData extends Tag_Plain {
+  isChecked: boolean;
+}
+export interface ImagePlainData extends Omit<Image_Plain, "tags" | "image"> {
+  tags?: string[];
+  image: string;
+}
+
+export interface CollectionsData {
   collections: Category_Plain[];
-  tags: (Tag_Plain & { isChecked: boolean })[];
-  images: (Image_Plain & { tags: string[]; image: string })[];
+  tags: TagData[];
+  images: ImagePlainData[];
   imagesPagination: Pagination;
 }
 
 export interface CollectionsDataState extends CollectionsData {
-  setCollections: (locale: string) => void;
-  setTags: (locale: string, category?: string) => void;
-  setImages: (locale: string, filters?: any) => void;
+  fetchCollections: (locale: string) => void;
+  fetchTags: (locale: string, category?: string) => void;
+  fetchImages: (locale: string, filters?: any) => void;
+  setCollections: (collections: Category_Plain[]) => void;
+  setTags: (tags: TagData[]) => void;
+  setImages: (images: ImagePlainData[]) => void;
   changeTagsSelection: (tags: string[]) => void;
   setImagesPagination: (pagination: Pagination) => void;
   clearData: () => void;
@@ -33,13 +44,7 @@ const getCollectionsData = async (
   locale: string
 ) => {
   try {
-    const data = await fetchCollections(locale);
-    const collections = data?.map((collection: any) => {
-      const coverImage = collection.attributes.coverImage?.data
-        ? `${collection.attributes.coverImage.data.attributes.url}`
-        : "";
-      return { ...collection.attributes, coverImage, id: collection.id };
-    });
+    const collections = await fetchCollections(locale);
     set({ collections });
   } catch (error) {
     console.error("Error fetching main data:", error);
@@ -52,14 +57,8 @@ const getTagsData = async (
   category?: string
 ) => {
   try {
-    const data: Tag[] = await fetchTags(locale, category);
-    const tags = data?.map((tag) => {
-      const categories = tag.attributes.categories?.data?.map(
-        (category: any) => category?.attributes?.name
-      );
-      return { ...tag.attributes, id: tag.id, categories, isChecked: false };
-    });
-    set({ tags } as any);
+    const tags: TagData[] = await fetchTags(locale, category);
+    set({ tags });
   } catch (error) {
     console.error("Error fetching main data:", error);
   }
@@ -76,26 +75,14 @@ const getImagesData = async (
           .tags?.filter((tag) => tag.isChecked)
           .map((tag) => tag.name)
       : get().tags?.map((tag) => tag.name);
-    const result = await fetchImages(
+    const result:
+      | { images: ImagePlainData[]; imagesPagination: Pagination }
+      | undefined = await fetchImages(
       locale,
       get().imagesPagination,
       selectedTags
     );
-    const data: Image[] = result.data;
-    const pagination = result.meta.pagination;
-    const images = data?.map((image) => {
-      const url = image?.attributes?.image?.data
-        ? `${image?.attributes?.image?.data?.attributes?.url}`
-        : "";
-      const tags: string[] = image.attributes.tags?.data?.map(
-        (tag) => tag?.attributes?.name
-      );
-      return { ...image.attributes, id: image.id, image: url, tags };
-    });
-    set({
-      images,
-      imagesPagination: pagination,
-    } as any);
+    if (result) set(result);
   } catch (error) {
     console.error("Error fetching main data:", error);
   }
@@ -125,6 +112,24 @@ const changeTagsSelection = (
 const clearData = (set: (partial: Partial<CollectionsDataState>) => void) => {
   set({ collections: [], images: [], tags: [] });
 };
+const setCollections = (
+  set: (partial: Partial<CollectionsDataState>) => void,
+  collections: Category_Plain[]
+) => {
+  set({ collections });
+};
+const setImages = (
+  set: (partial: Partial<CollectionsDataState>) => void,
+  images: ImagePlainData[]
+) => {
+  set({ images });
+};
+const setTags = (
+  set: (partial: Partial<CollectionsDataState>) => void,
+  tags: TagData[]
+) => {
+  set({ tags });
+};
 const setImagesPagination = (
   set: (partial: Partial<CollectionsDataState>) => void,
   pagination: Pagination
@@ -139,11 +144,15 @@ const useCollectionsStore = create<CollectionsDataState>((set, get) => ({
   imagesPagination: { page: 1, pageSize: 10 } as Pagination,
   setImagesPagination: (pagination: Pagination) =>
     setImagesPagination(set, pagination),
-  setCollections: async (locale: string) =>
+  fetchCollections: async (locale: string) =>
     await getCollectionsData(set, locale),
-  setTags: async (locale: string, category?: string) =>
+  fetchTags: async (locale: string, category?: string) =>
     await getTagsData(set, locale, category),
-  setImages: async (locale: string) => await getImagesData(set, get, locale),
+  fetchImages: async (locale: string) => await getImagesData(set, get, locale),
+  setCollections: (collections: Category_Plain[]) =>
+    setCollections(set, collections),
+  setTags: (tags: TagData[]) => setTags(set, tags),
+  setImages: (images: ImagePlainData[]) => setImages(set, images),
   clearData: () => clearData(set),
   changeTagsSelection: (tags: any[]) => changeTagsSelection(set, tags),
 }));
